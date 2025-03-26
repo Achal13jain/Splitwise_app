@@ -27,7 +27,7 @@ public class UserController {
 
     // ✅ New endpoint for frontend profile info
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public User getUserByEmail(@PathVariable("email") String email) {
         return userService.getUserByEmail(email);
     }
 }

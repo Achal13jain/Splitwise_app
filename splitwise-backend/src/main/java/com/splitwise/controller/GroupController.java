@@ -24,10 +24,14 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @PostMapping("/create")
-    public String createGroup(@RequestBody GroupRequest request) {
-        return groupService.createGroup(request);
-    }
+//    @PostMapping("/create")
+//    public String createGroup(@RequestBody GroupRequest request) {
+//        return groupService.createGroup(request);
+//    }
+@PostMapping("/create")
+public String createGroup(@RequestBody GroupWithMembersRequest request) {
+    return groupService.createGroupWithMembers(request);
+}
 
     @GetMapping("/user/{userId}")
     public List<GroupMember> getGroups(@PathVariable("userId") Long userId) {

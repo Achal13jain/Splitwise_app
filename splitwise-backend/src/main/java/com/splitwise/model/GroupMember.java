@@ -16,6 +16,15 @@ public class GroupMember {
     @ManyToOne
     private User user;
 
+    // ✅ Default constructor (required by JPA)
+    public GroupMember() {}
+
+    // ✅ Constructor to initialize with group and user
+    public GroupMember(Group group, User user) {
+        this.group = group;
+        this.user = user;
+    }
+
     // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
