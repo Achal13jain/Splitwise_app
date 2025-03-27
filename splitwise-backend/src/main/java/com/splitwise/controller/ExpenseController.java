@@ -1,6 +1,7 @@
 package com.splitwise.controller;
 
 import com.splitwise.dto.ExpenseRequest;
+import com.splitwise.dto.UserBalanceDTO;
 import com.splitwise.model.Expense;
 import com.splitwise.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,10 @@ public class ExpenseController {
     @GetMapping("/group/{groupId}")
     public List<Expense> getExpensesByGroup(@PathVariable("groupId") Long groupId) {
         return expenseService.getExpensesByGroup(groupId);
+    }
+
+    @GetMapping("/group/{groupId}/balances")
+    public List<UserBalanceDTO> getGroupBalances(@PathVariable Long groupId) {
+        return expenseService.calculateGroupBalances(groupId);
     }
 }

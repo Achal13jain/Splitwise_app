@@ -1,10 +1,7 @@
 package com.splitwise.controller;
 
-import com.splitwise.dto.GroupRequest;
+import com.splitwise.dto.*;
 //import com.splitwise.dto.GroupResponse;
-import com.splitwise.dto.GroupResponse;
-import com.splitwise.dto.GroupWithMembersRequest;
-import com.splitwise.dto.UserBalanceDTO;
 import com.splitwise.model.GroupMember;
 import com.splitwise.service.ExpenseService;
 import com.splitwise.service.GroupService;
@@ -52,6 +49,10 @@ public List<GroupResponse> getGroupsByEmail(@PathVariable("email") String email)
     @PostMapping("/create-with-members")
     public String createGroupWithMembers(@RequestBody GroupWithMembersRequest request) {
         return groupService.createGroupWithMembers(request);
+    }
+    @GetMapping("/{id}/details")
+    public GroupDetailsDTO getGroupDetails(@PathVariable("id") Long id) {
+        return groupService.getGroupDetails(id);
     }
 
 }
