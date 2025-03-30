@@ -8,6 +8,8 @@ public class GroupDetailsDTO {
     private List<GroupMemberDTO> members;
     private List<ExpenseDTO> expenses;
     private List<String> balances;
+    private List<SettlementDTO> settlements;
+    private boolean isSettled;
 
     public GroupDetailsDTO() {}
 
@@ -58,5 +60,21 @@ public class GroupDetailsDTO {
 
     public void setBalances(List<String> balances) {
         this.balances = balances;
+    }
+
+    public List<SettlementDTO> getSettlements() {
+        return settlements;
+    }
+
+    public void setSettlements(List<SettlementDTO> settlements) {
+        this.settlements = settlements;
+    }
+
+    public boolean isSettled() {
+        return isSettled;
+    }
+
+    public void setIsSettled(boolean isSettled) {
+        this.isSettled = isSettled;
     }
 }

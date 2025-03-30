@@ -1,5 +1,3 @@
-//update 2 - 30-03
-
 package com.splitwise.service;
 
 import com.splitwise.dto.*;
@@ -9,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,12 +57,11 @@ public class GroupService {
         User creator = userRepository.findById(request.getUserId()).orElse(null);
         if (creator == null) return "❌ Creator not found.";
 
-        // Add creator first
         groupMemberRepository.save(new GroupMember(savedGroup, creator));
         addedUsernames.add(creator.getName());
 
         for (String username : request.getMemberUsernames()) {
-            if (addedUsernames.contains(username)) continue; // skip duplicates
+            if (addedUsernames.contains(username)) continue;
 
             User user = userRepository.findByName(username);
             if (user == null) return "❌ User not found: " + username;
@@ -82,9 +80,11 @@ public class GroupService {
         }
 
         List<GroupMember> members = groupMemberRepository.findByUser(user);
-        return members.stream()
-                .map(m -> new GroupResponse(m.getGroup().getId(), m.getGroup().getName()))
-                .toList();
+        List<GroupResponse> responses = new ArrayList<>();
+        for (GroupMember m : members) {
+            responses.add(new GroupResponse(m.getGroup().getId(), m.getGroup().getName()));
+        }
+        return responses;
     }
 
     public GroupDetailsDTO getGroupDetails(Long groupId, Long userId) {
@@ -92,28 +92,54 @@ public class GroupService {
         if (group == null) return null;
 
         List<GroupMember> groupMembers = groupMemberRepository.findByGroupId(groupId);
-        List<GroupMemberDTO> members = groupMembers.stream()
-                .map(gm -> new GroupMemberDTO(
-                        gm.getUser().getId(),
-                        gm.getUser().getName(),
-                        gm.getUser().getEmail()
-                ))
-                .toList();
+        List<GroupMemberDTO> members = new ArrayList<>();
+        for (GroupMember gm : groupMembers) {
+            members.add(new GroupMemberDTO(
+                    gm.getUser().getId(),
+                    gm.getUser().getName(),
+                    gm.getUser().getEmail()
+            ));
+        }
 
         List<Expense> rawExpenses = expenseRepository.findByGroup(group);
-        List<ExpenseDTO> expenses = rawExpenses.stream().map(e ->
-                new ExpenseDTO(
-                        e.getId(),
-                        e.getDescription(),
-                        e.getAmount(),
-                        e.getPayer().getName(),
-                        e.getDate()
-                )
-        ).toList();
+        List<ExpenseDTO> expenses = new ArrayList<>();
+        for (Expense e : rawExpenses) {
+            expenses.add(new ExpenseDTO(
+                    e.getId(),
+                    e.getDescription(),
+                    e.getAmount(),
+                    e.getPayer().getName(),
+                    e.getDate()
+            ));
+        }
 
         List<String> balances = expenseService.calculateGroupBalances(groupId, userId);
 
-        return new GroupDetailsDTO(group.getId(), group.getName(), members, expenses, balances);
+        // ✅ Corrected logic for per-user settlement
+        boolean isSettled = true;
+        for (String msg : balances) {
+            if (msg.startsWith("You owe")) {
+                isSettled = false;
+                break;
+            }
+        }
+
+        List<Settlement> rawSettlements = settlementRepository.findByGroup(group);
+        List<SettlementDTO> settlementDTOs = new ArrayList<>();
+        for (Settlement s : rawSettlements) {
+            String payerName = userRepository.findById(s.getPayerId()).map(User::getName).orElse("Unknown");
+            String payeeName = userRepository.findById(s.getPayeeId()).map(User::getName).orElse("Unknown");
+            settlementDTOs.add(new SettlementDTO(
+                    s.getPayerId(), payerName,
+                    s.getPayeeId(), payeeName,
+                    s.getAmount(), s.getDate()
+            ));
+        }
+
+        GroupDetailsDTO dto = new GroupDetailsDTO(group.getId(), group.getName(), members, expenses, balances);
+        dto.setSettlements(settlementDTOs);
+        dto.setIsSettled(isSettled);
+        return dto;
     }
 
     public List<GroupMember> getUserGroups(Long userId) {
