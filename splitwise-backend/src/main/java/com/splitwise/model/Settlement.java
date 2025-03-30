@@ -10,13 +10,27 @@ public class Settlement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long groupId;
+
+    //  Mapping to User IDs
     private Long payerId;
     private Long payeeId;
+
     private double amount;
+
     private LocalDate date;
 
     public Settlement() {
-        this.date = LocalDate.now();
+        this.date = LocalDate.now(); // Set default date
+    }
+
+    //  Getters & Setters
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public Long getId() {

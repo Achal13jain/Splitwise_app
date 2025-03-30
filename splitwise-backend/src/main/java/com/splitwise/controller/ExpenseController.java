@@ -28,7 +28,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/group/{groupId}/balances")
-    public List<UserBalanceDTO> getGroupBalances(@PathVariable Long groupId) {
-        return expenseService.calculateGroupBalances(groupId);
+    public List<String> getGroupBalances(@PathVariable Long groupId, @RequestParam("userId") Long userId) {
+        return expenseService.calculateGroupBalances(groupId, userId);
     }
+
 }

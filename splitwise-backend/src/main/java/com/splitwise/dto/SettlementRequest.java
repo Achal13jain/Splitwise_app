@@ -4,8 +4,14 @@ public class SettlementRequest {
     private Long payerId;
     private Long payeeId;
     private double amount;
+    private Long groupId;
 
-    public SettlementRequest() {}
+    public Long getGroupId() {
+        return groupId;
+    }
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     public Long getPayerId() {
         return payerId;

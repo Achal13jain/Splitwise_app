@@ -19,6 +19,7 @@ public class SettlementController {
     @PostMapping("/settle")
     public String settleExpense(@RequestBody SettlementRequest request) {
         Settlement settlement = new Settlement();
+        settlement.setGroupId(request.getGroupId());
         settlement.setPayerId(request.getPayerId());
         settlement.setPayeeId(request.getPayeeId());
         settlement.setAmount(request.getAmount());
