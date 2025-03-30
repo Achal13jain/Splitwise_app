@@ -295,7 +295,7 @@ public class ExpenseService {
     public List<String> calculateGroupBalances(Long groupId, Long loggedInUserId) {
         List<GroupMember> members = groupMemberRepository.findByGroupId(groupId);
         List<Expense> expenses = expenseRepository.findByGroupId(groupId);
-        List<Settlement> settlements = settlementRepository.findAll(); // You could optimize this by filtering on group
+        List<Settlement> settlements = settlementRepository.findByGroupId(groupId);
 
         Map<Long, Double> paidMap = new HashMap<>();
         Map<Long, Double> owedMap = new HashMap<>();
