@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GroupService {
@@ -32,7 +34,6 @@ public class GroupService {
     @Autowired
     private SettlementRepository settlementRepository;
 
-
     public String createGroup(GroupRequest request) {
         User user = userRepository.findById(request.getUserId()).orElse(null);
         if (user == null) {
@@ -43,11 +44,7 @@ public class GroupService {
         group.setName(request.getName());
         Group savedGroup = groupRepository.save(group);
 
-        GroupMember gm = new GroupMember();
-        gm.setGroup(savedGroup);
-        gm.setUser(user);
-        groupMemberRepository.save(gm);
-
+        groupMemberRepository.save(new GroupMember(savedGroup, user));
         return "Group created and user added!";
     }
 
@@ -56,14 +53,23 @@ public class GroupService {
         group.setName(request.getName());
         Group savedGroup = groupRepository.save(group);
 
+        Set<String> addedUsernames = new HashSet<>();
+
         User creator = userRepository.findById(request.getUserId()).orElse(null);
         if (creator == null) return "❌ Creator not found.";
+
+        // Add creator first
         groupMemberRepository.save(new GroupMember(savedGroup, creator));
+        addedUsernames.add(creator.getName());
 
         for (String username : request.getMemberUsernames()) {
+            if (addedUsernames.contains(username)) continue; // skip duplicates
+
             User user = userRepository.findByName(username);
             if (user == null) return "❌ User not found: " + username;
+
             groupMemberRepository.save(new GroupMember(savedGroup, user));
+            addedUsernames.add(username);
         }
 
         return "✅ Group created with members!";
@@ -114,6 +120,4 @@ public class GroupService {
         User user = userRepository.findById(userId).orElse(null);
         return user != null ? groupMemberRepository.findByUser(user) : null;
     }
-
-
 }

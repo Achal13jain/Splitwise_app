@@ -3,7 +3,6 @@ package com.splitwise.dto;
 public class SettlementRequest {
     private Long payerId;
     private Long payeeId;
-    private double amount;
     private Long groupId;
 
     public Long getGroupId() {
@@ -27,13 +26,5 @@ public class SettlementRequest {
 
     public void setPayeeId(Long payeeId) {
         this.payeeId = payeeId;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 }
