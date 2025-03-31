@@ -115,7 +115,7 @@ public class GroupService {
 
         List<String> balances = expenseService.calculateGroupBalances(groupId, userId);
 
-        // ✅ Corrected logic for per-user settlement
+        // logic for per-user settlement
         boolean isSettled = true;
         for (String msg : balances) {
             if (msg.startsWith("You owe")) {
