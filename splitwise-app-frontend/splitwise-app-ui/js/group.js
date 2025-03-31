@@ -34,13 +34,15 @@ async function loadGroupDetails() {
 
     groupTitle.textContent = `Group: ${group.name}`;
 
+    // Render Members
     memberList.innerHTML = "";
     group.members.forEach(m => {
       const li = document.createElement("li");
-      li.textContent = `${m.name}`;
+      li.textContent = m.name;
       memberList.appendChild(li);
     });
 
+    // Render Expenses
     expenseList.innerHTML = "";
     if (group.expenses.length === 0) {
       expenseList.innerHTML = "<li>No expenses yet.</li>";
@@ -52,14 +54,14 @@ async function loadGroupDetails() {
       });
     }
 
+    // Render Balances
     balanceList.innerHTML = "";
-
-    //  Hardcoded check: if user has settled, always show settled message
-    const settledFlag = localStorage.getItem(`settled_${groupId}_${loggedInUserId}`) === "true";
-    if (settledFlag) {
+    if (group.isSettled) {
       const li = document.createElement("li");
       li.textContent = "✅ You are all settled up!";
       balanceList.appendChild(li);
+      // Optionally disable or hide the settle up button if everyone is settled.
+      document.getElementById("settleBtn").disabled = true;
     } else {
       if (group.balances.length === 0) {
         balanceList.innerHTML = "<li>No balances yet.</li>";
@@ -70,6 +72,8 @@ async function loadGroupDetails() {
           balanceList.appendChild(li);
         });
       }
+      // Enable settle button if not settled.
+      document.getElementById("settleBtn").disabled = false;
     }
 
   } catch (err) {
@@ -138,17 +142,17 @@ settleBtn.addEventListener("click", async () => {
     const group = await res.json();
 
     settleWithDropdown.innerHTML = "";
-    const balances = group.balances;
-
-    balances.forEach(msg => {
+    // Populate dropdown from balance messages that indicate dues.
+    group.balances.forEach(msg => {
       const match = msg.match(/^You owe (.+) ₹([\d.]+)/);
       if (match) {
         const name = match[1];
+        const amount = match[2];
         const user = group.members.find(m => m.name === name);
         if (user) {
           const option = document.createElement("option");
           option.value = user.id;
-          option.textContent = `${name} (₹${match[2]})`;
+          option.textContent = `${name} (₹${amount})`;
           settleWithDropdown.appendChild(option);
         }
       }
@@ -182,10 +186,9 @@ document.getElementById("settleForm").addEventListener("submit", async (e) => {
 
     if (res.ok) {
       alert("✅ Settlement recorded!");
-      // ✅ Store settled flag in localStorage
-      localStorage.setItem(`settled_${groupId}_${loggedInUserId}`, "true");
       settleModal.style.display = "none";
-      location.reload(); // reload to show "settled up"
+      // Reload group details to reflect updated balances and settlement status
+      loadGroupDetails();
     } else {
       alert("❌ Failed to settle up.");
     }
