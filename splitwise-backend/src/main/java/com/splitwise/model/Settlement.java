@@ -11,7 +11,7 @@ public class Settlement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ✅ Map to actual Group entity instead of just Long groupId
+    //  Mapping to actual Group entity 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
@@ -27,7 +27,7 @@ public class Settlement {
         this.date = LocalDate.now();
     }
 
-    // ✅ Getters & Setters
+    //  Getters & Setters
     public Long getId() {
         return id;
     }
