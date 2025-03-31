@@ -1,6 +1,6 @@
 
 package com.splitwise.controller;
-
+import com.splitwise.dto.ExpenseRequest;
 import com.splitwise.dto.SettlementRequest;
 import com.splitwise.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +20,11 @@ public class ExpenseController {
         String response = expenseService.settleUp(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/expenses/add")
+    public ResponseEntity<String> addExpense(@RequestBody ExpenseRequest request) {
+        String response = expenseService.addExpense(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
