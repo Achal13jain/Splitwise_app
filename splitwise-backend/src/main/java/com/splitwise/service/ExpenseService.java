@@ -68,7 +68,7 @@ public class ExpenseService {
             owedMap.put(uid, 0.0);
         }
 
-        // Step 1: Distribute expenses equally
+        //  Distribute expenses equally
         for (Expense e : expenses) {
             Long payerId = e.getPayer().getId();
             double amount = e.getAmount();
@@ -81,14 +81,14 @@ public class ExpenseService {
             }
         }
 
-        // Step 2: Compute net balances from expenses
+        // Compute net balances from expenses
         Map<Long, Double> netBalances = new HashMap<>();
         for (Long uid : paidMap.keySet()) {
             double net = paidMap.get(uid) - owedMap.get(uid);
             netBalances.put(uid, net);
         }
 
-        // Step 3: Apply settlements to net balances
+        //  Apply settlements to net balances
         for (Settlement s : settlements) {
             Long payerId = s.getPayerId();
             Long payeeId = s.getPayeeId();
@@ -100,7 +100,7 @@ public class ExpenseService {
             netBalances.put(payeeId, netBalances.get(payeeId) - amount);
         }
 
-        // Step 4: Generate human-readable messages for the logged-in user
+        // Generate messages for the logged-in user
         List<String> messages = new ArrayList<>();
         double myBalance = netBalances.get(loggedInUserId);
 
@@ -152,7 +152,7 @@ public class ExpenseService {
     }
 
 
-    // Added missing settleUp method
+    // Added settleUp method
     public String settleUp(SettlementRequest request) {
         Group group = groupRepository.findById(request.getGroupId()).orElse(null);
         if (group == null) return "Group not found!";
