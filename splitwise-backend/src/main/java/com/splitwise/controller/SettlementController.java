@@ -30,7 +30,7 @@ public class SettlementController {
         }
 
         Settlement settlement = new Settlement();
-        settlement.setGroup(group); // ✅ set Group object only
+        settlement.setGroup(group); // set Group object only
         settlement.setPayerId(request.getPayerId());
         settlement.setPayeeId(request.getPayeeId());
 
