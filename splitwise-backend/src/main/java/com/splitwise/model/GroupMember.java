@@ -16,10 +16,10 @@ public class GroupMember {
     @ManyToOne
     private User user;
 
-    // ✅ Default constructor (required by JPA)
+    //  Default constructor (required by JPA)
     public GroupMember() {}
 
-    // ✅ Constructor to initialize with group and user
+    // Constructor to initialize with group and user
     public GroupMember(Group group, User user) {
         this.group = group;
         this.user = user;
