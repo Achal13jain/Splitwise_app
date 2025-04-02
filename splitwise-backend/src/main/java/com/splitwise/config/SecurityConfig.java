@@ -16,12 +16,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/**").permitAll()  // Allow API calls
-                        .anyRequest().permitAll()                // Allow everything for now
+                        .anyRequest().permitAll()                // Allow everything 
                 );
         return http.build();
     }
 
-    // ✅ Required to avoid internal Spring Security errors
+    //  Required to avoid internal Spring Security errors
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
