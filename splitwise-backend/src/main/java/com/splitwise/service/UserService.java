@@ -21,7 +21,9 @@ public class UserService {
         if (userRepository.findByEmail(request.getEmail()) != null) {
             return "User already exists!";
         }
-
+        if (userRepository.findByName(request.getName()) != null) {
+            return "Username not available!";
+        }
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
