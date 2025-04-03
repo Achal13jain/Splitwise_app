@@ -1,6 +1,3 @@
-
-
-
 const API_BASE = "http://localhost:8080/api";
 
 //  Check login
@@ -109,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
   logoutBtn.addEventListener("click", () => {
     if (confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("userEmail");
-      window.location.href = "index.html";
+      window.location.href = "home.html";
     }
     dropdown.style.display = "none";
   });
