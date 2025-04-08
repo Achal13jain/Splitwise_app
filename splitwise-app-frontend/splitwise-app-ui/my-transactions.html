@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Transactions</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="logo-icon.png" alt="Logo" class="logo-icon"/>
+      <span>SplitWise</span>
+    </div>
+    <nav class="nav-links">
+      <a href="dashboard.html">← Back to Dashboard</a>
+    </nav>
+  </header>
+
+  <main style="padding: 20px;">
+    <h2>My Transactions</h2>
+    <table border="1" cellspacing="0" cellpadding="10" style="width: 100%; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Group</th>
+          <th>Paid By</th>
+          <th>Type</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="transactionsTableBody">
+      </tbody>
+    </table>
+  </main>
+
+  <script src="js/my-transactions.js"></script>
+</body>
+</html>
