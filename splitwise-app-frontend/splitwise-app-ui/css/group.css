@@ -74,14 +74,28 @@ body {
   z-index: 1000;
 }
 
+.dropdown-menu a,
 .dropdown-menu button {
-  padding: 10px 16px;
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
   background: none;
   border: none;
   text-align: left;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
   cursor: pointer;
-  font-weight: 500;
 }
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #f2f2f2;
+  color: #000;
+  text-decoration: none;
+}
+
 
 .dropdown-menu button:hover {
   background-color: #f2f2f2;
@@ -218,4 +232,23 @@ button {
 
 #settleForm button:hover {
   background-color: #00b092;
+}
+.dropdown-link {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #333 !important;
+  text-decoration: none !important;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+
+.dropdown-link:hover {
+  background-color: #f2f2f2;
+  color: #000 !important;
+  text-decoration: none !important;
 }
