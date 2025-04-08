@@ -2,6 +2,7 @@ package com.splitwise.service;
 
 import com.splitwise.dto.ExpenseRequest;
 import com.splitwise.dto.SettlementRequest;
+import com.splitwise.dto.TransactionDTO;
 import com.splitwise.model.*;
 import com.splitwise.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,6 +193,46 @@ public class ExpenseService {
 
         settlementRepository.save(settlement);
         return "Successfully settled ₹" + String.format("%.2f", amountToSettle) + " with " + payeeName;
+    }
+    public List<TransactionDTO> getPersonalTransactions(Long userId) {
+        List<TransactionDTO> transactions = new ArrayList<>();
+
+        List<Expense> expenses = expenseRepository.findByPayerId(userId);
+        for (Expense e : expenses) {
+            TransactionDTO dto = new TransactionDTO(
+                    e.getDescription(),
+                    e.getAmount(),
+                    e.getGroup().getName(),
+                    e.getPayer().getName(), // Use getName()
+                    "EXPENSE",
+                    e.getDate().atStartOfDay() // Use getDate()
+            );
+            transactions.add(dto);
+        }
+
+        List<Settlement> settlements = settlementRepository.findByPayerIdOrPayeeId(userId, userId);
+        for (Settlement s : settlements) {
+            User payer = userRepository.findById(s.getPayerId()).orElse(null);
+            User payee = userRepository.findById(s.getPayeeId()).orElse(null);
+
+            String description = "Settlement between " +
+                    (payer != null ? payer.getName() : "Unknown") +
+                    " and " +
+                    (payee != null ? payee.getName() : "Unknown");
+
+            TransactionDTO dto = new TransactionDTO(
+                    description,
+                    s.getAmount(),
+                    s.getGroup().getName(),
+                    (payer != null ? payer.getName() : "Unknown"),
+                    "SETTLEMENT",
+                    s.getDate().atStartOfDay() // Use getDate()
+            );
+            transactions.add(dto);
+        }
+
+        transactions.sort((a, b) -> b.getDate().compareTo(a.getDate()));
+        return transactions;
     }
 }
 
