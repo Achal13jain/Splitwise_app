@@ -2,10 +2,12 @@
 package com.splitwise.controller;
 import com.splitwise.dto.ExpenseRequest;
 import com.splitwise.dto.SettlementRequest;
+import com.splitwise.dto.TransactionDTO;
 import com.splitwise.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -26,5 +28,8 @@ public class ExpenseController {
         String response = expenseService.addExpense(request);
         return ResponseEntity.ok(response);
     }
-
+    @GetMapping("/users/{userId}/transactions")
+    public ResponseEntity<List<TransactionDTO>> getUserTransactions(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(expenseService.getPersonalTransactions(userId));
+    }
 }
