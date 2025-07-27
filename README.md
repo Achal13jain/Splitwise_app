@@ -4,8 +4,7 @@
 The Splitwise Web Application is a full-stack Java-based web application built using:
 - **Backend**: Spring Boot (Java)
 - **Database**: PostgreSQL
-- **Frontend**: HTML, CSS, JavaScript with Bootstrap
-
+- **Frontend**: HTML, CSS, JavaScript 
 The application follows a **layered architecture** to ensure modularity, scalability, and ease of maintenance.
 
 ---
